@@ -1,7 +1,7 @@
 from selenium import webdriver
 import pytest
 import sys
-sys.path.append("E:\\folder f\\Srujanee Automation")
+sys.path.append("E:\\folder F\\git\\Srujanee")
 from PageObjects.loginPage import LoginPage
 # from PageObjects.loginPage import LoginPage
 from Utilities.readProperties import ReadConfig
