@@ -4,20 +4,22 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-@pytest.fixture()
-def setUp(browser):
-    if browser == 'chrome':
+@pytest.fixture(params=['chrome'], scope= "session", autouse=True)
+def driver_init(request):
+    if request.param == 'chrome':
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    elif browser=='firefox':
-        driver = webdriver.Firefox()
-    return driver
+    # elif request.param =='firefox':
+    #     driver = webdriver.Firefox()
+    request.driver = driver
+    yield request.driver
+    driver.close()
 
-def pytest_addoption(parser):
-    parser.addoption("--browser")
+# def pytest_addoption(parser):
+#     parser.addoption("--browser")
 
-@pytest.fixture()
-def browser(request):
-    return request.config.getoption("--browser")
+# @pytest.fixture(scope="session")
+# def browser(request):
+#     return request.config.getoption("--browser")
 
 #Hook for adding env info to HTML report
 def pytest_configure(config):
@@ -28,4 +30,4 @@ def pytest_configure(config):
 #Hook for delete/modify env info to HTML report
 @pytest.mark.optionalhook
 def pytest_metadata(metadata):
-    metadata.pop("Java_Home", None)
+    metadata.pop("Python", None)
